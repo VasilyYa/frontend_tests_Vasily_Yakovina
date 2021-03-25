@@ -1,0 +1,113 @@
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Страница со статичной версткой формы</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<script type="text/javascript">
+	"use strict";
+    document.addEventListener('DOMContentLoaded', function () {
+		const form = document.getElementById('form');
+		form.addEventListener('submit', formSend);
+
+		async function formSend(e) {
+			e.preventDefault();
+
+			let error = formValidate(form);
+			let formData = new FormData(form);
+
+			if (error === 0) {
+				//alert("try to send!")
+				let response = await fetch('https://60376bfd5435040017722533.mockapi.io/form', {
+					method: 'POST',
+					body: formData
+				});
+				if (response.ok) {
+					let result = await response.text();
+					alert(result);
+					form.reset();
+				} else {
+					alert("Ошибка отправки данных!");
+				}
+			} else {
+				alert('Заполните поля корректно!');
+			}
+		}
+
+		function formValidate(form) {
+			let error = 0;
+			let formReq = document.querySelectorAll('._req');
+			for (let i = 0; i < formReq.length; i++) {
+				const input = formReq[i];
+				if (input.classList.contains('_fio'))
+					{
+					if(fioTest(input))
+						{
+						error++;
+						alert('alert_fio');
+						}
+					} else if (input.classList.contains('_email'))
+						{
+							if (input.value !== '') // т.к. email - это необязательное поле!
+								{
+									if (emailTest(input))
+										{
+											error++;
+											alert('alert_email');
+										}
+								}
+						} else if (input.classList.contains('_phone'))
+							{
+								if(phoneTest(input))
+									{
+										error++;
+										alert('alert_phone');
+									}
+							} else
+								{
+									if (input.value === '')
+										{
+											error++;
+											alert('alert_empty');
+										}
+								}
+			}
+			return error;
+		}
+		function fioTest(input) {
+			return !/^[а-я\s-]+$/i.test(input.value);
+		}
+		function emailTest(input) {
+			return !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,8})+$/.test(input.value);
+		}
+		function phoneTest(input) {
+			  return !/^[+-\s\d]+$/.test(input.value);
+		}
+
+	});
+</script>
+
+<body>
+	<div class="form">
+		<form action="https://60376bfd5435040017722533.mockapi.io/form" class="form_body" id="form" method="post">
+			<h1 class="form_title">Задать вопрос</h1>
+			<div class="form_item">
+				<input type="text" name="name" class="form_input _req _fio" placeholder="Фамилия Имя Отчество *">
+			</div>
+			<div class="form_item">
+				<input type="text" name="phone" class="form_input _req _phone" placeholder="Телефон *">
+			</div>
+			<div class="form_item">
+				<input type="text" name="email" class="form_input _req _email" placeholder="Email">
+			</div>
+			<div class="form_item">
+				<button type="submit" class="form_button">ОТПРАВИТЬ ЗАПРОС</button>
+			</div>
+		</form>
+	</div>
+
+</body>
+
+</html>
