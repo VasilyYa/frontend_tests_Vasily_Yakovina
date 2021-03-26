@@ -46,7 +46,7 @@
 					if(fioTest(input))
 						{
 						error++;
-						alert('alert_fio');
+						//alert('alert_fio');
 						}
 					} else if (input.classList.contains('_email'))
 						{
@@ -55,7 +55,7 @@
 									if (emailTest(input))
 										{
 											error++;
-											alert('alert_email');
+											//alert('alert_email');
 										}
 								}
 						} else if (input.classList.contains('_phone'))
@@ -63,21 +63,21 @@
 								if(phoneTest(input))
 									{
 										error++;
-										alert('alert_phone');
+										//alert('alert_phone');
 									}
 							} else
 								{
 									if (input.value === '')
 										{
 											error++;
-											alert('alert_empty');
+											//alert('alert_empty');
 										}
 								}
 			}
 			return error;
 		}
 		function fioTest(input) {
-			return !/^[а-я\s-]+$/i.test(input.value);
+			return !/^[а-яё\s-]+$/i.test(input.value);
 		}
 		function emailTest(input) {
 			return !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,8})+$/.test(input.value);
